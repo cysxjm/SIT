@@ -1,0 +1,53 @@
+[2023-11-13 00:09:20,243][flwr][INFO] - Starting Flower simulation, config: ServerConfig(num_rounds=10, round_timeout=None)
+[2023-11-13 00:09:37,345][flwr][INFO] - Flower VCE: Ray initialized with resources: {'node:__internal_head__': 1.0, 'GPU': 1.0, 'CPU': 20.0, 'object_store_memory': 6805794816.0, 'node:127.0.0.1': 1.0, 'memory': 13611589632.0}
+[2023-11-13 00:09:37,346][flwr][INFO] - Flower VCE: Resources for each Virtual Client: {'num_cpus': 2, 'num_gpus': 0.5}
+[2023-11-13 00:09:37,371][flwr][INFO] - Flower VCE: Creating VirtualClientEngineActorPool with 2 actors
+[2023-11-13 00:09:37,374][flwr][INFO] - Initializing global parameters
+[2023-11-13 00:09:37,375][flwr][INFO] - Requesting initial parameters from one random client
+[2023-11-13 00:10:08,444][flwr][ERROR] - Traceback (most recent call last):
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 137, in _submit_job
+    self.actor_pool.submit_client_job(
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\flwr\simulation\ray_transport\ray_actor.py", line 253, in submit_client_job
+    self.submit(actor_fn, job)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\flwr\simulation\ray_transport\ray_actor.py", line 231, in submit
+    future = fn(actor, job_fn, cid)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\flwr\simulation\ray_transport\ray_client_proxy.py", line 138, in <lambda>
+    lambda a, v, cid: a.run.remote(v, cid), (job_fn, self.cid)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\actor.py", line 165, in remote
+    return self._remote(args, kwargs)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\_private\auto_init_hook.py", line 24, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\util\tracing\tracing_helper.py", line 426, in _start_span
+    return method(self, args, kwargs, *_args, **_kwargs)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\actor.py", line 225, in _remote
+    return invocation(args, kwargs)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\actor.py", line 209, in invocation
+    return actor._actor_method_call(
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\actor.py", line 1231, in _actor_method_call
+    object_refs = worker.core_worker.submit_actor_task(
+  File "python\ray\_raylet.pyx", line 3832, in ray._raylet.CoreWorker.submit_actor_task
+  File "python\ray\_raylet.pyx", line 3837, in ray._raylet.CoreWorker.submit_actor_task
+  File "python\ray\_raylet.pyx", line 743, in ray._raylet.prepare_args_and_increment_put_refs
+  File "python\ray\_raylet.pyx", line 734, in ray._raylet.prepare_args_and_increment_put_refs
+  File "python\ray\_raylet.pyx", line 781, in ray._raylet.prepare_args_internal
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\_private\serialization.py", line 494, in serialize
+    return self._serialize_to_msgpack(value)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\_private\serialization.py", line 472, in _serialize_to_msgpack
+    pickle5_serialized_object = self._serialize_to_pickle5(
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\_private\serialization.py", line 425, in _serialize_to_pickle5
+    raise e
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\_private\serialization.py", line 420, in _serialize_to_pickle5
+    inband = pickle.dumps(
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\cloudpickle\cloudpickle_fast.py", line 88, in dumps
+    cp.dump(obj)
+  File "D:\Users\xjmcy\anaconda3\envs\pytorch\lib\site-packages\ray\cloudpickle\cloudpickle_fast.py", line 733, in dump
+    return Pickler.dump(self, obj)
+MemoryError
+
+[2023-11-13 00:10:08,455][flwr][ERROR] - 
+[2023-11-13 00:10:08,455][flwr][ERROR] - 
+[2023-11-13 00:10:08,455][flwr][ERROR] - Your simulation crashed :(. This could be because of several reasons.The most common are: 
+	 > Your system couldn't fit a single VirtualClient: try lowering `client_resources`.
+	 > All the actors in your pool crashed. This could be because: 
+		 - You clients hit an out-of-memory (OOM) error and actors couldn't recover from it. Try launching your simulation with more generous `client_resources` setting (i.e. it seems {'num_cpus': 2, 'num_gpus': 0.5} is not enough for your workload). Use fewer concurrent actors. 
+		 - You were running a multi-node simulation and all worker nodes disconnected. The head node might still be alive but cannot accommodate any actor with resources: {'num_cpus': 2, 'num_gpus': 0.5}.
